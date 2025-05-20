@@ -6,6 +6,8 @@
 #include <ctime>
 #include <iomanip>
 
+#define _CRT_SECURE_NO_WARNINGS // Suppress localtime_s warnings
+
 void displayStartupScreen() {
     std::cout << "\n";
     std::cout << "====================================\n";
@@ -91,14 +93,18 @@ public:
         lastLocation1 = currentLocation;
 
         std::time_t now = std::time(nullptr);
+        std::tm tm;
+        localtime_s(&tm, &now);
         std::stringstream ss;
-        ss << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
+        ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
         lastLocation1Time = ss.str();
         currentLocation = loc;
     }
     void startWork() { workStartTime = std::time(nullptr); }
     void endWork() {
         workEndTime = std::time(nullptr);
+        std::tm tm;
+        localtime_s(&tm, &workEndTime);
         double minutes = difftime(workEndTime, workStartTime) / 60.0;
         totalSalary += minutes * 35.0; // Rs. 35 per minute for overtime/work time
     }
@@ -226,8 +232,7 @@ private:
     int nextReportId = 1;
 
     void initializeFiles() {
-        std::ofstream file;
-        file.open(usersFile);
+        std::ofstream file(usersFile);
         file << "student_id,password,name,contact,current_location,last_location1,last_location1_time,last_location2,last_location2_time,total_salary\n";
         file.close();
 
@@ -279,13 +284,11 @@ public:
         if (!check.good()) {
             initializeFiles();
         }
-        else {
-            check.close();
-            nextRosterId = getNextId(rosterFile);
-            nextSalaryId = getNextId(salaryFile);
-            nextVacationId = getNextId(vacationFile);
-            nextReportId = getNextId(reportsFile);
-        }
+        check.close();
+        nextRosterId = getNextId(rosterFile);
+        nextSalaryId = getNextId(salaryFile);
+        nextVacationId = getNextId(vacationFile);
+        nextReportId = getNextId(reportsFile);
     }
 
     void registerUser() {
@@ -302,13 +305,14 @@ public:
         std::getline(std::cin, contact);
 
         std::vector<User> users;
-        std::ifstream file(usersFile);
-        std::string line;
-        std::getline(file, line);
-        while (std::getline(file, line)) {
-            users.push_back(User::fromCSV(line));
+        {
+            std::ifstream file(usersFile);
+            std::string line;
+            std::getline(file, line);
+            while (std::getline(file, line)) {
+                users.push_back(User::fromCSV(line));
+            }
         }
-        file.close();
 
         for (const auto& user : users) {
             if (user.getStudentId() == studentId) {
@@ -329,13 +333,14 @@ public:
         std::cin.ignore();
 
         std::vector<User> users;
-        std::ifstream file(usersFile);
-        std::string line;
-        std::getline(file, line);
-        while (std::getline(file, line)) {
-            users.push_back(User::fromCSV(line));
+        {
+            std::ifstream file(usersFile);
+            std::string line;
+            std::getline(file, line);
+            while (std::getline(file, line)) {
+                users.push_back(User::fromCSV(line));
+            }
         }
-        file.close();
 
         bool found = false;
         for (auto& user : users) {
@@ -372,13 +377,14 @@ public:
         std::cin.ignore();
 
         std::vector<User> users;
-        std::ifstream file(usersFile);
-        std::string line;
-        std::getline(file, line);
-        while (std::getline(file, line)) {
-            users.push_back(User::fromCSV(line));
+        {
+            std::ifstream file(usersFile);
+            std::string line;
+            std::getline(file, line);
+            while (std::getline(file, line)) {
+                users.push_back(User::fromCSV(line));
+            }
         }
-        file.close();
 
         std::vector<User> updatedUsers;
         bool found = false;
@@ -445,15 +451,15 @@ public:
             file << salary.toCSV() << "\n";
             file.close();
 
-            // Update user's total salary
             std::vector<User> users;
-            std::ifstream userFile(usersFile);
-            std::string line;
-            std::getline(userFile, line);
-            while (std::getline(userFile, line)) {
-                users.push_back(User::fromCSV(line));
+            {
+                std::ifstream userFile(usersFile);
+                std::string line;
+                std::getline(userFile, line);
+                while (std::getline(userFile, line)) {
+                    users.push_back(User::fromCSV(line));
+                }
             }
-            userFile.close();
 
             for (auto& user : users) {
                 if (user.getStudentId() == studentId) {
@@ -471,24 +477,24 @@ public:
     }
 
     void viewSalaries() {
-        std::ifstream salaryFile(salaryFile);
-        std::ifstream userFile(usersFile);
-        if (!salaryFile.is_open() || !userFile.is_open()) {
+        std::ifstream salaryFileStream(salaryFile);
+        std::ifstream userFileStream(usersFile);
+        if (!salaryFileStream.is_open() || !userFileStream.is_open()) {
             std::cerr << "Error: Could not open files.\n";
             return;
         }
 
         std::vector<User> users;
         std::string line;
-        std::getline(userFile, line);
-        while (std::getline(userFile, line)) {
+        std::getline(userFileStream, line);
+        while (std::getline(userFileStream, line)) {
             users.push_back(User::fromCSV(line));
         }
-        userFile.close();
+        userFileStream.close();
 
         std::cout << "\nSalary Details:\n";
-        std::getline(salaryFile, line);
-        while (std::getline(salaryFile, line)) {
+        std::getline(salaryFileStream, line);
+        while (std::getline(salaryFileStream, line)) {
             SalaryDetails salary = SalaryDetails::fromCSV(line);
             for (const auto& user : users) {
                 if (user.getStudentId() == salary.getStudentId()) {
@@ -502,7 +508,7 @@ public:
                 }
             }
         }
-        salaryFile.close();
+        salaryFileStream.close();
     }
 
     void editSalary() {
@@ -512,13 +518,14 @@ public:
         std::cin.ignore();
 
         std::vector<SalaryDetails> salaries;
-        std::ifstream file(salaryFile);
-        std::string line;
-        std::getline(file, line);
-        while (std::getline(file, line)) {
-            salaries.push_back(SalaryDetails::fromCSV(line));
+        {
+            std::ifstream file(salaryFile);
+            std::string line;
+            std::getline(file, line);
+            while (std::getline(file, line)) {
+                salaries.push_back(SalaryDetails::fromCSV(line));
+            }
         }
-        file.close();
 
         bool found = false;
         for (auto& salary : salaries) {
@@ -537,14 +544,15 @@ public:
                 salary.setOvertimeHours(overtime);
                 salary.setAllowance(allowance);
 
-                // Update user's total salary
                 std::vector<User> users;
-                std::ifstream userFile(usersFile);
-                std::getline(userFile, line);
-                while (std::getline(userFile, line)) {
-                    users.push_back(User::fromCSV(line));
+                {
+                    std::ifstream userFile(usersFile);
+                    std::string line;
+                    std::getline(userFile, line);
+                    while (std::getline(userFile, line)) {
+                        users.push_back(User::fromCSV(line));
+                    }
                 }
-                userFile.close();
 
                 for (auto& user : users) {
                     if (user.getStudentId() == studentId) {
@@ -574,30 +582,32 @@ public:
     }
 
     void displayRealTimeStatus() {
-        std::ifstream userFile(usersFile);
-        std::ifstream rosterFile(rosterFile);
-        if (!userFile.is_open() || !rosterFile.is_open()) {
+        std::ifstream userFileStream(usersFile);
+        std::ifstream rosterFileStream(rosterFile);
+        if (!userFileStream.is_open() || !rosterFileStream.is_open()) {
             std::cerr << "Error: Could not open files.\n";
             return;
         }
 
         std::vector<User> users;
         std::string line;
-        std::getline(userFile, line);
-        while (std::getline(userFile, line)) {
+        std::getline(userFileStream, line);
+        while (std::getline(userFileStream, line)) {
             users.push_back(User::fromCSV(line));
         }
-        userFile.close();
+        userFileStream.close();
 
         std::vector<DutyRoster> rosters;
-        std::getline(rosterFile, line);
-        while (std::getline(rosterFile, line)) {
+        std::getline(rosterFileStream, line);
+        while (std::getline(rosterFileStream, line)) {
             rosters.push_back(DutyRoster::fromCSV(line));
         }
-        rosterFile.close();
+        rosterFileStream.close();
 
         std::time_t now = std::time(nullptr);
-        std::cout << "\nReal-Time Status (as of " << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S") << "):\n";
+        std::tm tm;
+        localtime_s(&tm, &now);
+        std::cout << "\nReal-Time Status (as of " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "):\n";
         for (const auto& user : users) {
             bool onDuty = user.getWorkStartTime() != 0 && user.getWorkEndTime() == 0;
             std::string shiftInfo = "Not scheduled";
@@ -607,8 +617,8 @@ public:
                     std::stringstream ssStart(roster.getShiftStart()), ssEnd(roster.getShiftEnd());
                     ssStart >> std::get_time(&tmStart, "%Y-%m-%d %H:%M:%S");
                     ssEnd >> std::get_time(&tmEnd, "%Y-%m-%d %H:%M:%S");
-                    std::time_t startTime = std::mktime(&tmStart);
-                    std::time_t endTime = std::mktime(&tmEnd);
+                    std::time_t startTime = mktime(&tmStart);
+                    std::time_t endTime = mktime(&tmEnd);
                     if (now >= startTime && now <= endTime) {
                         shiftInfo = "Shift: " + roster.getShiftStart() + " to " + roster.getShiftEnd();
                         break;
@@ -684,7 +694,7 @@ public:
 
     std::string selectLocation() {
         int choice;
-        std::cout << "Select Current Location:\n";
+        std::cout << "Select Current Building:\n";
         std::cout << "1. Location A\n";
         std::cout << "2. Location B\n";
         std::cout << "3. Location C\n";
@@ -769,13 +779,14 @@ public:
 
     void userMenu(const std::string& studentId) {
         std::vector<User> users;
-        std::ifstream file(usersFile);
-        std::string line;
-        std::getline(file, line);
-        while (std::getline(file, line)) {
-            users.push_back(User::fromCSV(line));
+        {
+            std::ifstream file(usersFile);
+            std::string line;
+            std::getline(file, line);
+            while (std::getline(file, line)) {
+                users.push_back(User::fromCSV(line));
+            }
         }
-        file.close();
 
         User* currentUser = nullptr;
         for (auto& user : users) {
@@ -790,12 +801,10 @@ public:
             return;
         }
 
-        currentUser->setCurrentLocation(selectLocation());
-
         int choice;
         while (true) {
             std::cout << "\nUser Menu (Student ID: " << studentId << ")\n";
-            std::cout << "Current Location: " << currentUser->getCurrentLocation() << "\n";
+            std::cout << "Current Building: " << currentUser->getCurrentLocation() << "\n";
             std::cout << "1. Start Work\n";
             std::cout << "2. End Work\n";
             std::cout << "3. Change Location\n";
@@ -813,7 +822,12 @@ public:
             switch (choice) {
             case 1:
                 currentUser->startWork();
-                std::cout << "Work started at: " << std::put_time(std::localtime(&currentUser->getWorkStartTime()), "%Y-%m-%d %H:%M:%S") << "\n";
+                {
+                    std::time_t startTime = currentUser->getWorkStartTime();
+                    std::tm tm;
+                    localtime_s(&tm, &startTime);
+                    std::cout << "Work started at: " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "\n";
+                }
                 break;
             case 2:
                 if (currentUser->getWorkStartTime() == 0) {
@@ -821,7 +835,12 @@ public:
                 }
                 else {
                     currentUser->endWork();
-                    std::cout << "Work ended at: " << std::put_time(std::localtime(&currentUser->getWorkEndTime()), "%Y-%m-%d %H:%M:%S") << "\n";
+                    {
+                        std::time_t endTime = currentUser->getWorkEndTime();
+                        std::tm tm;
+                        localtime_s(&tm, &endTime);
+                        std::cout << "Work ended at: " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << "\n";
+                    }
                     std::cout << "Total Salary Updated: Rs. " << currentUser->getTotalSalary() << "\n";
                     currentUser->resetWorkTimes();
                 }
@@ -887,8 +906,37 @@ int main() {
             std::cout << "Enter Password: ";
             std::cin >> password;
             std::cin.ignore();
+
             if (authenticateUser(studentId, password)) {
-                system.userMenu(studentId);
+                std::vector<User> users;
+                {
+                    std::ifstream file("users.csv");
+                    std::string line;
+                    std::getline(file, line);
+                    while (std::getline(file, line)) {
+                        users.push_back(User::fromCSV(line));
+                    }
+                }
+
+                User* currentUser = nullptr;
+                for (auto& user : users) {
+                    if (user.getStudentId() == studentId) {
+                        currentUser = &user;
+                        break;
+                    }
+                }
+
+                if (currentUser) {
+                    std::string initialLocation = system.selectLocation();
+                    currentUser->setCurrentLocation(initialLocation);
+                    std::cout << "Current Building set to: " << initialLocation << "\n";
+                    std::cout << "Press Enter to proceed to User Menu...";
+                    std::cin.get();
+                    system.userMenu(studentId);
+                }
+                else {
+                    std::cout << "User data not found!\n";
+                }
             }
             else {
                 std::cout << "Invalid user credentials!\n";
