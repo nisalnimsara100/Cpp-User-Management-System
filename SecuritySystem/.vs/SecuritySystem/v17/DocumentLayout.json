@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "F:\\Security-Database-System-System-in-C-\\SecuritySystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D63D8B54-9F1A-4D81-A702-8E35E6DB0138}|SecuritySystem\\SecuritySystem.vcxproj|F:\\Security-Database-System-System-in-C-\\SecuritySystem\\SecuritySystem\\security_system.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D63D8B54-9F1A-4D81-A702-8E35E6DB0138}|SecuritySystem\\SecuritySystem.vcxproj|solutionrelative:SecuritySystem\\security_system.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "security_system.cpp",
+              "DocumentMoniker": "F:\\Security-Database-System-System-in-C-\\SecuritySystem\\SecuritySystem\\security_system.cpp",
+              "RelativeDocumentMoniker": "SecuritySystem\\security_system.cpp",
+              "ToolTip": "F:\\Security-Database-System-System-in-C-\\SecuritySystem\\SecuritySystem\\security_system.cpp",
+              "RelativeToolTip": "SecuritySystem\\security_system.cpp",
+              "ViewState": "AQIAAG4DAAAAAAAAAAAIwHsDAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-20T16:54:23.82Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

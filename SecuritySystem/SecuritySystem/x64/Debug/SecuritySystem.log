@@ -1,0 +1,19 @@
+﻿  security_system.cpp
+F:\Security-Database-System-System-in-C-\SecuritySystem\SecuritySystem\security_system.cpp(95,34): error C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\Security-Database-System-System-in-C-\SecuritySystem\SecuritySystem\security_system.cpp(474,33): error C2280: 'std::basic_ifstream<char,std::char_traits<char>>::basic_ifstream(const std::basic_ifstream<char,std::char_traits<char>> &)': attempting to reference a deleted function
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\fstream(87,5):
+  see declaration of 'std::basic_ifstream<char,std::char_traits<char>>::basic_ifstream'
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\fstream(87,5):
+  'std::basic_ifstream<char,std::char_traits<char>>::basic_ifstream(const std::basic_ifstream<char,std::char_traits<char>> &)': function was explicitly deleted
+  
+F:\Security-Database-System-System-in-C-\SecuritySystem\SecuritySystem\security_system.cpp(578,33): error C2280: 'std::basic_ifstream<char,std::char_traits<char>>::basic_ifstream(const std::basic_ifstream<char,std::char_traits<char>> &)': attempting to reference a deleted function
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\fstream(87,5):
+  see declaration of 'std::basic_ifstream<char,std::char_traits<char>>::basic_ifstream'
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\fstream(87,5):
+  'std::basic_ifstream<char,std::char_traits<char>>::basic_ifstream(const std::basic_ifstream<char,std::char_traits<char>> &)': function was explicitly deleted
+  
+F:\Security-Database-System-System-in-C-\SecuritySystem\SecuritySystem\security_system.cpp(600,73): error C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\Security-Database-System-System-in-C-\SecuritySystem\SecuritySystem\security_system.cpp(816,112): error C2102: '&' requires l-value
+F:\Security-Database-System-System-in-C-\SecuritySystem\SecuritySystem\security_system.cpp(824,112): error C2102: '&' requires l-value
+F:\Security-Database-System-System-in-C-\SecuritySystem\SecuritySystem\security_system.cpp(816,72): error C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\Security-Database-System-System-in-C-\SecuritySystem\SecuritySystem\security_system.cpp(824,74): error C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
